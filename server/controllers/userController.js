@@ -44,8 +44,8 @@ const clerkWebhooks = async (req, res) => {
         }
 
         const savedUser = await userModel.create(userData);
-        console.log(savedUser)
-        console.log("✅ User saved successfully:", savedUser._id);
+        console.log("✅ User saved successfully:", savedUser);
+        console.log("✅ User ID:", savedUser._id);
 
         return res.status(201).json({ success: true, message: "User created" });
       }
@@ -99,4 +99,29 @@ const clerkWebhooks = async (req, res) => {
   }
 };
 
-export { clerkWebhooks };
+
+const userCredits=async (req,res)=>{
+try {
+
+  const {clerkId}=req.body
+  
+  if (!clerkId) {
+    return res.json({success:false, message:"ClerkId is required"})
+  }
+  
+  const userData=await userModel.findOne({clerkId})
+  
+  if (!userData) {
+    return res.json({success:false, message:"User not found"})
+  }
+  
+  res.json({success:true, credits:userData.creditBalance})
+
+
+} catch (error) {
+  console.log(error.message)
+  res.json({success:false,message:error.message})
+}
+}
+
+export { clerkWebhooks,userCredits };

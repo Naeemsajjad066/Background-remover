@@ -19,12 +19,12 @@ app.post(
   clerkWebhooks
 );
 
-// ✅ Enable JSON only for other routes
-// app.use(express.json());
-// app.use(cors());
+// ✅ Enable CORS and JSON parsing for other routes
 app.use(cors());
-app.use('/api/user', userRouter); // Router first (webhook inside handles raw)
-app.use(express.json()); // JSON parser comes after
+app.use(express.json()); // JSON parser comes first
+
+// ✅ Other routes (after JSON parser)
+app.use('/api/user', userRouter);
 // ✅ Test route
 app.get('/', (req, res) => {
   res.send('API is running....');

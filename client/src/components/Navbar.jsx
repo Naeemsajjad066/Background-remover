@@ -2,11 +2,22 @@ import React from 'react'
 import { assets } from '../assets/assets'
 import { Link } from 'react-router-dom'
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react';
+import { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
+import { useEffect } from 'react';
 
 const Navbar = () => {
 
+    const {credit,loadCreditData}=useContext(AppContext)
+
     const {openSignIn} = useClerk();
     const {isSignedIn,user}=useUser();
+
+    useEffect(()=>{
+        if(isSignedIn){
+            loadCreditData()
+        }
+    },[isSignedIn])
     return (
         <div className='flex justify-between items-center py-4 mx-12 lg:mx-24'>
             <Link to='/'>
