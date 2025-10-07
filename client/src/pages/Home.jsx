@@ -6,7 +6,7 @@ import Testimonial from '../components/Testimonial'
 import Upload from '../components/Upload'
 const Home = () => {
   return (
-    <div>
+    <div className='bg-100'>
         <Header/>
         <Steps/>
         <BgSlider/>
