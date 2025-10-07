@@ -8,7 +8,7 @@ const Navbar = () => {
     const {openSignIn} = useClerk();
     const {isSignedIn,user}=useUser();
     return (
-        <div className='flex justify-between items-center py-4 mx-24 lg:mx-44'>
+        <div className='flex justify-between items-center py-4 mx-12 lg:mx-24'>
             <Link to='/'>
                 <img className='w-32 sm:w-44' src={assets.logo} alt="" />
             </Link>
