@@ -4,6 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import connectDB from './configs/mongodb.js';
 import userRouter from './routes/userRoutes.js';
+import imageRouter from './routes/imageRoutes.js';
 import { clerkWebhooks } from './controllers/userController.js';
 
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ app.use(express.json()); // JSON parser comes first
 
 // ✅ Other routes (after JSON parser)
 app.use('/api/user', userRouter);
+app.use('/api/image', imageRouter);
 // ✅ Test route
 app.get('/', (req, res) => {
   res.send('API is running....');

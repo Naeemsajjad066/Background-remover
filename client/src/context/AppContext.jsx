@@ -1,28 +1,44 @@
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useClerk } from "@clerk/clerk-react";
 import { useState } from "react";
 import axios from 'axios'
 import { toast } from "react-toastify";
 import { createContext } from "react";
+import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
+
 
 export const AppContext = createContext();
 
 
-const AppContextProvider=(props)=>{
+const AppContextProvider = (props) => {
 
-    const [credit,setCredit]=useState(false)
+    const navigate = useNavigate()
+    const [credit, setCredit] = useState(false)
 
-    const backendUrl=import.meta.env.VITE_BACKEND_URL
+    const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-    const {getToken}=useAuth()
-    const loadCreditData=async()=>{
+    const { getToken } = useAuth()
+
+    const [image, setImage] = useState(false)
+    const { isSignedIn } = useUser()
+    const { openSignIn } = useClerk()
+    const [resultImage, setResultImage] = useState(false)
+
+    const loadCreditData = async () => {
         try {
-            
-            const token=await getToken()
 
-            const data=await axios.get(`${backendUrl}/api/user/credits`,{headers:{token}})
-            if(data.success){
-                setCredit(data.credits)
-                console.log(data.credits)
+            const token = await getToken()
+            console.log("Token obtained:", token)
+
+            const response = await axios.get(`${backendUrl}/api/user/credits`, { headers: { token } })
+            console.log("Full response:", response)
+            console.log("Response data:", response.data)
+
+            if (response.data.success) {
+                setCredit(response.data.credits)
+                console.log("Credits:", response.data.credits)
+            } else {
+                console.log("Request failed:", response.data.message)
             }
 
 
@@ -31,9 +47,42 @@ const AppContextProvider=(props)=>{
             toast.error(error.message)
         }
     }
+    const removebg = async (image) => {
+        try {
+            if (!isSignedIn) {
+                return openSignIn()
+            }
+            setImage(image)
+            setResultImage(false)
+            navigate('/result')
+            const token = await getToken()
+            const formData = new FormData()
+            image && formData.append('image', image)
 
-    const value={
-        credit,setCredit,loadCreditData,backendUrl
+            const response = await axios.post(`${backendUrl}/api/image/removebg`, formData, { headers: { token, } })
+            console.log("Remove BG Response:", response.data)
+            
+            if (response.data.success) {
+                setResultImage(response.data.resultImage)
+                response.data.creditBalance && setCredit(response.data.creditBalance)
+                toast.success("Background removed successfully")
+            }
+            else {
+                toast.error(response.data.message)
+                response.data.creditBalance && setCredit(response.data.creditBalance)
+                if(response.data.creditBalance===0){
+                    navigate('/buycredits')
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const value = {
+        credit, setCredit, loadCreditData, backendUrl
+        , image, setImage, removebg,resultImage, setResultImage
     }
 
     return (
