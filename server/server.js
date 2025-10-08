@@ -18,7 +18,9 @@ app.post(
   bodyParser.raw({ type: 'application/json' }),
   clerkWebhooks
 );
-
+app.get('/api/user/webhooks', (req, res) => {
+  res.send('✅ Webhook route is live (POST only)');
+});
 // ✅ Enable CORS and JSON parsing for other routes
 app.use(cors());
 app.use(express.json()); // JSON parser comes first
