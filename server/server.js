@@ -13,21 +13,21 @@ const app = express();
 await connectDB();
 
 // ✅ Clerk webhook route (must use raw body)
-// app.post(
-//   '/api/user/webhooks',
-//   bodyParser.raw({ type: 'application/json' }),
-//   clerkWebhooks
-// );
 app.post(
   '/api/user/webhooks',
   bodyParser.raw({ type: 'application/json' }),
-  (req, res) => {
-    console.log('✅ Webhook POST received');
-    console.log('Headers:', req.headers);
-    console.log('Body:', req.body.toString());
-    res.status(200).send('Webhook received');
-  }
+  clerkWebhooks
 );
+// app.post(
+//   '/api/user/webhooks',
+//   bodyParser.raw({ type: 'application/json' }),
+//   (req, res) => {
+//     console.log('✅ Webhook POST received');
+//     console.log('Headers:', req.headers);
+//     console.log('Body:', req.body.toString());
+//     res.status(200).send('Webhook received');
+//   }
+// );
 app.get('/api/user/webhooks', (req, res) => {
   res.send('✅ Webhook route is live (POST only)');
 });
