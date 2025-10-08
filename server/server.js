@@ -7,7 +7,6 @@ import userRouter from './routes/userRoutes.js';
 import imageRouter from './routes/imageRoutes.js';
 import { clerkWebhooks } from './controllers/userController.js';
 
-const PORT = process.env.PORT || 5000;
 const app = express();
 
 // ✅ Connect MongoDB
@@ -36,6 +35,10 @@ app.get('/', (req, res) => {
 // app.use('/api/user', userRouter);
 
 // ✅ Start server
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-});
+});}
+
+export default server;
