@@ -1,35 +1,18 @@
-import logo from './logo.svg'
-import logo_icon from './logo_icon.svg'
-import arrow_icon from './arrow_icon.svg'
-import header_img from './header_img.png'
-import remove_bg_icon from './remove_bg_icon.svg'
-import upload_btn_icon from './upload_btn_icon.svg'
-import upload_icon from './upload_icon.svg'
-import download_icon from './download_icon.svg'
-import image_w_bg from './image_w_bg.png'
-import image_wo_bg from './image_wo_bg.png'
-import facebook_icon from './facebook_icon.svg'
-import google_plus_icon from './google_plus_icon.svg'
-import twitter_icon from './twitter_icon.svg'
-import profile_img_1 from './profile_img_1.png'
-import profile_img_2 from './profile_img_2.png'
-import credit_icon from './credit_icon.png'
-
 export const assets = {
-    logo,
-    logo_icon,
-    arrow_icon,
-    header_img,
-    remove_bg_icon,
-    upload_icon,
-    download_icon,
-    image_w_bg,
-    image_wo_bg,
-    facebook_icon,
-    google_plus_icon,
-    twitter_icon,
-    upload_btn_icon,
-    credit_icon
+    logo: '/assets/logo.svg',
+    logo_icon: '/assets/logo_icon.svg',
+    arrow_icon: '/assets/arrow_icon.svg',
+    header_img: '/assets/header_img.png',
+    remove_bg_icon: '/assets/remove_bg_icon.svg',
+    upload_icon: '/assets/upload_icon.svg',
+    download_icon: '/assets/download_icon.svg',
+    image_w_bg: '/assets/image_w_bg.png',
+    image_wo_bg: '/assets/image_wo_bg.png',
+    facebook_icon: '/assets/facebook_icon.svg',
+    google_plus_icon: '/assets/google_plus_icon.svg',
+    twitter_icon: '/assets/twitter_icon.svg',
+    upload_btn_icon: '/assets/upload_btn_icon.svg',
+    credit_icon: '/assets/credit_icon.png'
 }
 
 export const testimonialsData = [
@@ -37,14 +20,14 @@ export const testimonialsData = [
         id: 1,
         text: "I've been using bg.removal for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.",
         author: "Richard Nelson",
-        image: profile_img_1,
+        image: '/assets/profile_img_1.png',
         jobTitle:'Web Developer'
     },
     {
         id: 2,
         text: "I've been using bg.removal for nearly 6 months, I had a fantastic experience. The quality is top-notch. I recommend others to try this app.",
         author: "Donald Jackman",
-        image: profile_img_2,
+        image: '/assets/profile_img_2.png',
         jobTitle:'UI Deginer'
     },
 ];
