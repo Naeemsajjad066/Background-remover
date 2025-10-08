@@ -12,14 +12,21 @@ const Navbar = () => {
     const { credit, loadCreditData } = useContext(AppContext)
 
     const { openSignIn } = useClerk();
-    const { isSignedIn, user } = useUser();
+    const { isSignedIn, user, isLoaded } = useUser();
     const navigate=useNavigate()
 
-    useEffect(() => {
-        if (isSignedIn) {
-            loadCreditData()
-        }
-    }, [isSignedIn])
+    // Show loading spinner while Clerk is loading
+    if (!isLoaded) {
+        return (
+            <div className='flex justify-between items-center py-4 mx-8 lg:mx-44'>
+                <Link to='/'>
+                    <img className='w-32 sm:w-44' src={assets.logo} alt="" />
+                </Link>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600"></div>
+            </div>
+        )
+    }
+
     return (
         <div className='flex justify-between items-center py-4 mx-8  lg:mx-44'>
             <Link to='/'>

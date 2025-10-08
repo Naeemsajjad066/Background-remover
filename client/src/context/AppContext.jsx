@@ -1,5 +1,5 @@
 import { useAuth, useClerk } from "@clerk/clerk-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios'
 import { toast } from "react-toastify";
 import { createContext } from "react";
@@ -20,7 +20,7 @@ const AppContextProvider = (props) => {
     const { getToken } = useAuth()
 
     const [image, setImage] = useState(false)
-    const { isSignedIn } = useUser()
+    const { isSignedIn, isLoaded } = useUser()
     const { openSignIn } = useClerk()
     const [resultImage, setResultImage] = useState(false)
 
@@ -79,6 +79,13 @@ const AppContextProvider = (props) => {
             toast.error(error.message)
         }
     }
+
+    // Load credit data when user is authenticated and Clerk is loaded
+    useEffect(() => {
+        if (isLoaded && isSignedIn) {
+            loadCreditData()
+        }
+    }, [isLoaded, isSignedIn])
 
     const value = {
         credit, setCredit, loadCreditData, backendUrl
