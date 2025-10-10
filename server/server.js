@@ -20,7 +20,7 @@ app.use(
       "http://localhost:5173", // for local testing
     ],
     methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "token"], // ✅ Added 'token' header
     credentials: true,
   })
 );
