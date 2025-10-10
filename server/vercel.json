@@ -1,4 +1,4 @@
-  {
+{
     "version": 2,
     "builds": [
         {
@@ -7,14 +7,22 @@
             "config": {
                 "includeFiles": [
                     "dist/**"
-                ]
+                ],
+                "maxDuration": 60
             }
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "server.js"
+            "dest": "server.js",
+            "methods": ["GET", "POST", "OPTIONS"]
         }
-    ]
+    ],
+    "functions": {
+        "server.js": {
+            "maxDuration": 60,
+            "memory": 1024
+        }
+    }
 }

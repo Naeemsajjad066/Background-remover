@@ -8,7 +8,8 @@ const removeBgImage = async (req, res) => {
   // ✅ Add CORS headers manually (required for Vercel)
   res.setHeader("Access-Control-Allow-Origin", "https://background-remover-by-naeem.vercel.app");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   // ✅ Handle preflight (browser OPTIONS request)
   if (req.method === "OPTIONS") {
@@ -18,8 +19,13 @@ const removeBgImage = async (req, res) => {
   let imagePath = null;
 
   try {
+    // Check for multer errors (file too large, wrong type, etc.)
+    if (req.fileValidationError) {
+      return res.json({ success: false, message: req.fileValidationError });
+    }
+
     if (!req.file) {
-      return res.json({ success: false, message: "No image file provided" });
+      return res.json({ success: false, message: "No image file provided. Please upload an image under 4MB." });
     }
 
     const { clerkId } = req.body;

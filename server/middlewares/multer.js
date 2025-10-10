@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage,
     limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB limit
+        fileSize: 4 * 1024 * 1024, // 4MB limit (Vercel has 4.5MB limit, leave some margin)
     },
     fileFilter: function (req, file, callback) {
         // Accept images only
