@@ -12,47 +12,49 @@ const app = express();
 // ✅ Connect MongoDB
 await connectDB();
 
+// ✅ Enable CORS (before any routes)
+app.use(
+  cors({
+    origin: [
+      "https://background-remover-by-naeem.vercel.app", // your frontend
+      "http://localhost:5173", // for local testing
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+// ✅ Parse JSON bodies
+app.use(express.json());
+
 // ✅ Clerk webhook route (must use raw body)
 app.post(
   '/api/user/webhooks',
   bodyParser.raw({ type: 'application/json' }),
   clerkWebhooks
 );
-// app.post(
-//   '/api/user/webhooks',
-//   bodyParser.raw({ type: 'application/json' }),
-//   (req, res) => {
-//     console.log('✅ Webhook POST received');
-//     console.log('Headers:', req.headers);
-//     console.log('Body:', req.body.toString());
-//     res.status(200).send('Webhook received');
-//   }
-// );
+
+// ✅ Webhook test route
 app.get('/api/user/webhooks', (req, res) => {
   res.send('✅ Webhook route is live (POST only)');
 });
 
-
-// ✅ Enable CORS and JSON parsing for other routes
-app.use(cors());
-app.use(express.json()); // JSON parser comes first
-
-// ✅ Other routes (after JSON parser)
+// ✅ API routes
 app.use('/api/user', userRouter);
 app.use('/api/image', imageRouter);
-// ✅ Test route
+
+// ✅ Root route
 app.get('/', (req, res) => {
-  res.send('API is running....');
+  res.send('🚀 API is running....');
 });
 
-// ✅ Other routes
-// app.use('/api/user', userRouter);
-
-// ✅ Start server
+// ✅ Start server locally (Vercel will handle deployment automatically)
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});}
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+}
 
 export default app;
