@@ -54,7 +54,7 @@ const AppContextProvider = (props) => {
             }
 
             // Validate file size (4MB limit)
-            const maxSize = 4 * 1024 * 1024; // 4MB in bytes
+            const maxSize = 4 * 1024 * 1024; // 4MB in bytes 
             if (image && image.size > maxSize) {
                 const sizeMB = (image.size / (1024 * 1024)).toFixed(2);
                 toast.error(`File too large (${sizeMB}MB). Maximum size is 4MB. Please compress your image.`);
@@ -62,6 +62,7 @@ const AppContextProvider = (props) => {
             }
 
             // Validate file type
+            
             if (image && !image.type.startsWith('image/')) {
                 toast.error('Please upload a valid image file');
                 return;
