@@ -15,7 +15,6 @@ const connectDB = async () => {
 
   // If already connected, return the existing connection
   if (cached.conn) {
-    console.log('✅ Using cached MongoDB connection');
     return cached.conn;
   }
 
@@ -28,15 +27,12 @@ const connectDB = async () => {
       socketTimeoutMS: 45000,
     };
 
-    console.log('🔄 Creating new MongoDB connection...');
-    
     // Handle the database name properly
     const mongoURI = process.env.MONGODB_URI.includes('?')
       ? process.env.MONGODB_URI.replace('?', '/backgroundRemover?')
       : `${process.env.MONGODB_URI}/backgroundRemover`;
 
     cached.promise = mongoose.connect(mongoURI, opts).then((mongoose) => {
-      console.log('✅ MongoDB connected successfully');
       return mongoose;
     });
   }
@@ -45,7 +41,6 @@ const connectDB = async () => {
     cached.conn = await cached.promise;
   } catch (error) {
     cached.promise = null;
-    console.error('❌ MongoDB connection failed:', error.message);
     throw error;
   }
 

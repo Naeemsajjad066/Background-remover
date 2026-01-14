@@ -92,8 +92,16 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 if (process.env.VERCEL !== '1') {
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`🚀 Server running on port ${PORT}`);
+    
+    // Try to connect to database on startup
+    try {
+      await connectDB();
+      console.log('✅ Database connected');
+    } catch (error) {
+      console.error('❌ Database connection failed:', error.message);
+    }
   });
 }
 
