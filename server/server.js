@@ -9,8 +9,25 @@ import { clerkWebhooks } from './controllers/userController.js';
 
 const app = express();
 
-// ✅ Connect MongoDB
-await connectDB();
+// ✅ Connect MongoDB (for serverless, connection happens on demand)
+let isConnected = false;
+const ensureDBConnection = async () => {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+};
+
+// Middleware to ensure DB connection on each request
+app.use(async (req, res, next) => {
+  try {
+    await ensureDBConnection();
+    next();
+  } catch (error) {
+    console.error('DB Connection Error:', error);
+    res.status(500).json({ error: 'Database connection failed' });
+  }
+});
 
 // ✅ Enable CORS (before any routes)
 app.use(

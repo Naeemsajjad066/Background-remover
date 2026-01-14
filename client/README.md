@@ -147,6 +147,68 @@ Users purchase credits to remove backgrounds. Each successful removal consumes c
 
 ---
 
+## 🚀 Deployment
+
+### Vercel Deployment Instructions
+
+**Important:** This is a monorepo - deploy client and server as **separate projects**.
+
+#### Deploy Backend (Server)
+1. Go to [Vercel Dashboard](https://vercel.com/new)
+2. Import your GitHub repository
+3. Configure project:
+   - **Project Name**: `background-remover-server` (or your choice)
+   - **Root Directory**: `server`
+   - **Framework Preset**: Other
+4. Add Environment Variables:
+   ```
+   MONGODB_URI=your_mongodb_connection_string
+   CLERK_WEBHOOK_SECRET=your_clerk_webhook_secret
+   JWT_SECRET=your_jwt_secret
+   RAZORPAY_KEY_ID=your_razorpay_key_id
+   RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+   NODE_ENV=production
+   ```
+5. Deploy and copy the deployment URL
+
+#### Deploy Frontend (Client)
+1. Import repository again in Vercel
+2. Configure project:
+   - **Project Name**: `background-remover-client`
+   - **Root Directory**: `client`
+   - **Framework Preset**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+3. Add Environment Variables:
+   ```
+   VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+   VITE_BACKEND_URL=your_server_deployment_url
+   ```
+4. Deploy
+
+#### Update CORS Settings
+After deploying, update the CORS origin in `server/server.js` with your frontend deployment URL.
+
+### Troubleshooting Deployment Errors
+
+**Error: FUNCTION_INVOCATION_FAILED**
+- ✅ Ensure environment variables are set in Vercel dashboard
+- ✅ Check MongoDB URI is correct and database is accessible
+- ✅ Verify you set Root Directory to `server` (not root folder)
+- ✅ Check Vercel function logs for specific errors
+
+**Error: Build Failed**
+- ✅ Verify Root Directory is set correctly
+- ✅ Check all dependencies are in package.json
+- ✅ Clear deployment cache and redeploy
+
+**Database Connection Issues**
+- ✅ Whitelist Vercel IPs in MongoDB Atlas (or allow all: 0.0.0.0/0)
+- ✅ Verify MONGODB_URI format: `mongodb+srv://user:pass@cluster.mongodb.net`
+- ✅ Check MongoDB Atlas cluster is running
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
