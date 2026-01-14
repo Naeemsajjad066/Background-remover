@@ -38,7 +38,6 @@
 - **MongoDB & Mongoose** - Database
 - **Multer** - File upload handling
 - **JWT** - Token-based authentication
-- **Razorpay** - Payment processing
 - **Clerk Webhooks** - User synchronization
 
 ---
@@ -49,7 +48,6 @@
 - Node.js (v16 or higher)
 - MongoDB
 - Clerk Account
-- Razorpay Account (for payments)
 
 ### Installation
 
@@ -79,8 +77,7 @@ PORT=5000
 MONGODB_URI=your_mongodb_connection_string
 CLERK_WEBHOOK_SECRET=your_clerk_webhook_secret
 JWT_SECRET=your_jwt_secret
-RAZORPAY_KEY_ID=your_razorpay_key_id
-RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+
 ```
 
 Create `.env` file in the **client** directory:
@@ -147,27 +144,9 @@ Users purchase credits to remove backgrounds. Each successful removal consumes c
 
 ---
 
-## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
----
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
----
-
-## 📧 Contact
-
-For questions or support, please open an issue in the repository.
 
 ---
 
