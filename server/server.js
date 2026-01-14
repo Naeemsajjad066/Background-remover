@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 import connectDB from './configs/mongodb.js';
 import userRouter from './routes/userRoutes.js';
 import imageRouter from './routes/imageRoutes.js';
@@ -9,23 +10,18 @@ import { clerkWebhooks } from './controllers/userController.js';
 
 const app = express();
 
-// ✅ Connect MongoDB (for serverless, connection happens on demand)
-let isConnected = false;
-const ensureDBConnection = async () => {
-  if (!isConnected) {
-    await connectDB();
-    isConnected = true;
-  }
-};
-
-// Middleware to ensure DB connection on each request
+// ✅ Middleware to ensure DB connection on each request
 app.use(async (req, res, next) => {
   try {
-    await ensureDBConnection();
+    await connectDB();
     next();
   } catch (error) {
-    console.error('DB Connection Error:', error);
-    res.status(500).json({ error: 'Database connection failed' });
+    console.error('❌ DB Connection Error:', error.message);
+    return res.status(500).json({ 
+      success: false,
+      error: 'Database connection failed',
+      message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
   }
 });
 
@@ -57,6 +53,31 @@ app.get('/api/user/webhooks', (req, res) => {
   res.send('✅ Webhook route is live (POST only)');
 });
 
+// ✅ Health check route
+app.get('/health', async (req, res) => {
+  try {
+    const dbState = mongoose.connection.readyState;
+    const states = {
+      0: 'disconnected',
+      1: 'connected',
+      2: 'connecting',
+      3: 'disconnecting'
+    };
+    
+    res.json({
+      status: 'ok',
+      database: states[dbState],
+      environment: process.env.NODE_ENV || 'development',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+});
+
 // ✅ API routes
 app.use('/api/user', userRouter);
 app.use('/api/image', imageRouter);
@@ -66,9 +87,11 @@ app.get('/', (req, res) => {
   res.send('🚀 API is running....');
 });
 
-// ✅ Start server locally (Vercel will handle deployment automatically)
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
+// ✅ Start server (locally or for development)
+// In production (Vercel), the serverless function handles this automatically
+const PORT = process.env.PORT || 5000;
+
+if (process.env.VERCEL !== '1') {
   app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
   });

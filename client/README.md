@@ -191,11 +191,49 @@ After deploying, update the CORS origin in `server/server.js` with your frontend
 
 ### Troubleshooting Deployment Errors
 
+#### Error: "Database connection failed"
+This is the most common error. Follow these steps:
+
+**1. Check MongoDB Atlas Network Access**
+- Go to MongoDB Atlas → Network Access
+- Click "Add IP Address"
+- Select "Allow Access from Anywhere" (0.0.0.0/0)
+- Click "Confirm"
+
+**2. Verify Environment Variable in Vercel**
+- Go to Vercel Project → Settings → Environment Variables
+- Check `MONGODB_URI` exists and is correct
+- Format should be: `mongodb+srv://username:password@cluster.mongodb.net`
+- **DO NOT** include the database name in the URI (the code adds it automatically)
+- Example: `mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net` ✅
+- Wrong: `mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/backgroundRemover` ❌
+
+**3. Test Connection String**
+- Copy your MONGODB_URI
+- Visit your deployment URL: `https://your-server.vercel.app/health`
+- Check if database status shows "connected"
+
+**4. Check MongoDB Atlas Cluster**
+- Ensure your cluster is running (not paused)
+- Free tier clusters pause after 60 days of inactivity
+- Resume the cluster if needed
+
+**5. Verify Password Special Characters**
+- If your MongoDB password contains special characters (@, #, %, etc.)
+- They must be URL-encoded
+- Example: `p@ssw0rd` → `p%40ssw0rd`
+
+**6. Redeploy After Changes**
+- After updating environment variables in Vercel
+- Go to Deployments tab
+- Click "..." menu on latest deployment
+- Select "Redeploy"
+
 **Error: FUNCTION_INVOCATION_FAILED**
-- ✅ Ensure environment variables are set in Vercel dashboard
-- ✅ Check MongoDB URI is correct and database is accessible
-- ✅ Verify you set Root Directory to `server` (not root folder)
+- ✅ Ensure ALL environment variables are set in Vercel dashboard
 - ✅ Check Vercel function logs for specific errors
+- ✅ Verify Root Directory is set to `server` (not root folder)
+- ✅ Try clearing deployment cache and redeploy
 
 **Error: Build Failed**
 - ✅ Verify Root Directory is set correctly
