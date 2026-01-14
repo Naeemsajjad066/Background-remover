@@ -5,8 +5,17 @@ import userModel from '../models/userModel.js';
 
 //controller function to remove background
 const removeBgImage = async (req, res) => {
-  // ✅ Add CORS headers manually (required for Vercel)
-  res.setHeader("Access-Control-Allow-Origin", "https://background-remover-by-naeem.vercel.app");
+  // ✅ Add CORS headers for both development and production
+  const allowedOrigins = [
+    "https://background-remover-by-naeem.vercel.app",
+    "http://localhost:5173"
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
   res.setHeader("Access-Control-Allow-Credentials", "true");

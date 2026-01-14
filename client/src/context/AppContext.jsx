@@ -77,6 +77,8 @@ const AppContextProvider = (props) => {
 
             const response = await axios.post(`${backendUrl}/api/image/removebg`, formData, { headers: { token, } })
             console.log("Remove BG Response:", response.data)
+            console.log("Response success:", response.data.success)
+            console.log("Response resultImage:", response.data.resultImage)
             
             if (response.data.success) {
                 setResultImage(response.data.resultImage)

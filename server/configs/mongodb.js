@@ -25,14 +25,17 @@ const connectDB = async () => {
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
+      dbName: 'backgroundRemover', // Explicitly set database name
     };
 
-    // Handle the database name properly
-    const mongoURI = process.env.MONGODB_URI.includes('?')
-      ? process.env.MONGODB_URI.replace('?', '/backgroundRemover?')
-      : `${process.env.MONGODB_URI}/backgroundRemover`;
+    // Use the connection URI as-is, dbName option will handle the database
+    const mongoURI = process.env.MONGODB_URI;
+    
+    console.log('🔗 Connecting to database: backgroundRemover');
 
     cached.promise = mongoose.connect(mongoURI, opts).then((mongoose) => {
+      console.log('✅ MongoDB connected successfully');
+      console.log('📊 Database name:', mongoose.connection.name);
       return mongoose;
     });
   }

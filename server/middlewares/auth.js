@@ -34,6 +34,20 @@ const  authUser=async(req,res, next)=>{
         
         req.body.clerkId = clerkId
         
+        // Extract additional user info if available (for auto-registration)
+        if (token_decode.email) {
+            req.body.email = token_decode.email
+        }
+        if (token_decode.given_name) {
+            req.body.firstName = token_decode.given_name
+        }
+        if (token_decode.family_name) {
+            req.body.lastName = token_decode.family_name
+        }
+        if (token_decode.picture) {
+            req.body.photo = token_decode.picture
+        }
+        
         console.log("ClerkId extracted:", clerkId)
         
         next()

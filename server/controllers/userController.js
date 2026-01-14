@@ -109,10 +109,24 @@ try {
     return res.json({success:false, message:"ClerkId is required"})
   }
   
-  const userData=await userModel.findOne({clerkId})
+  let userData=await userModel.findOne({clerkId})
   
+  // If user not found, create a new user with default credits
   if (!userData) {
-    return res.json({success:false, message:"User not found"})
+    console.log('User not found in database, creating new user...');
+    
+    // Get user info from Clerk token (if available in headers)
+    const newUser = {
+      clerkId: clerkId,
+      email: req.body.email || `user_${clerkId}@temp.com`,
+      firstName: req.body.firstName || 'User',
+      lastName: req.body.lastName || '',
+      photo: req.body.photo || '',
+      creditBalance: 5 // Give 5 free credits to new users
+    };
+    
+    userData = await userModel.create(newUser);
+    console.log('✅ New user created:', userData);
   }
   
   res.json({success:true, credits:userData.creditBalance})
