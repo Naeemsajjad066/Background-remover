@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "projects": [
+    {
+      "name": "background-remover-client",
+      "root": "client",
+      "framework": "vite"
+    },
+    {
+      "name": "background-remover-server",
+      "root": "server",
+      "framework": null
+    }
+  ]
+}
